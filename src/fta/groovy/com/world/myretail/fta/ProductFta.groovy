@@ -11,5 +11,7 @@ class ProductFta extends BaseFta {
 
     then:
     response.statusCode == HttpStatus.OK
+    response.body.name == 'The Big Lebowski (Blu-ray)'
+    response.body.current_price == [value: 12.34, currency_code: 'USD']
   }
 }
