@@ -19,6 +19,6 @@ class Price {
   Map<String, String> price_record
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-  Date updateDate
+  Date last_update_on
 }
 

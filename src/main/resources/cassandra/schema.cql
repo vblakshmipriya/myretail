@@ -1,2 +1,2 @@
 CREATE KEYSPACE IF NOT EXISTS productdata WITH durable_writes = true AND REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': '1'};
-CREATE TABLE IF NOT EXISTS productdata.price(product_id     text,price_record   text,last_update_on timestamp,PRIMARY KEY (product_id));
+CREATE TABLE IF NOT EXISTS productdata.price(product_id text, price_record text,last_update_on timestamp,PRIMARY KEY (product_id));
