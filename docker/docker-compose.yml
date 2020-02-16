@@ -1,0 +1,24 @@
+version: "3"
+services:
+  dse-search:
+    container_name:
+      retail-dse-search
+    image:
+      datastax/dse-server:5.1.10
+    environment:
+      - DS_LICENSE=accept
+    command:
+      -s
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock: -1
+    ports:
+      - 9042:9042
+      - 8983:8983
+    restart: always
+    volumes:
+      - ../src/main/resources/cassandra/schema.cql:/opt/dse/schema.cql
+    healthcheck:
+      test: ["CMD-SHELL", "[ $$(nodetool statusgossip) = running ]"]
+      interval: 50s
