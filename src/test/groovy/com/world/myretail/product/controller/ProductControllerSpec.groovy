@@ -29,7 +29,7 @@ class ProductControllerSpec extends Specification {
     MvcResult result = mockMvc.perform(get("/v1/product/id/$id")).andReturn()
 
     then:
-    1 * mockProductService.getProduct(id, 'http://localhost:8080') >> new Product(name: name, current_price: [value: 12.34, currency_code: 'USD'], links: [rel:'self', href:'someurl'])
+    1 * mockProductService.getProduct(id, 'http://localhost:8080') >> new Product(name: name, current_price: [value: 12.34, currency_code: 'USD'], links: [[rel: 'self', href: 'someurl']])
     result.response.status == HttpStatus.OK.value()
     JsonUtils.assertJsonEquals("""
             {
@@ -39,11 +39,11 @@ class ProductControllerSpec extends Specification {
                 "value":12.34,
                 "currency_code":"USD"
               },
-              "links": 
+              "links": [
               {
                 "rel": "self",
                 "href": "someurl"
-              }
+              }]
             }""", result.response.contentAsString)
 
     where:
