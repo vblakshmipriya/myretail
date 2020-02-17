@@ -41,3 +41,45 @@ Build an application that performs the following actions:
   
   * Launch the application "gradle bootRun"
   
+## Demo Prep
+
+### GET 
+ *  Endpoint: http://localhost:8080/v1/product/id/13860428
+ *  Sample Response body
+        {
+          "id": "13860428",
+          "name": "The Big Lebowski (Blu-ray)",
+          "current_price": {
+            "value": 120.0,
+            "currency_code": "USD"
+          },
+          "links": [
+            {
+              "rel": "self",
+              "href": "http://localhost:8080/v1/product/id/13860428"
+            }
+          ]
+        }
+        
+### PUT - to update product price
+ *  Endpoint: http://localhost:8080/v1/product/id/13860427/price
+ *  Sample Request body
+        {
+            "value":123.00,
+            "currency_code":"usd"
+        }
+ *  Sample Response body
+        {
+          "id": "13860427",
+          "current_price": {
+            "value": 123.0,
+            "currency_code": "usd"
+          },
+          "links": [
+            {
+              "rel": "self",
+              "href": "http://localhost:8080/v1/product/id/13860427/price"
+            }
+          ]
+        }
+       
