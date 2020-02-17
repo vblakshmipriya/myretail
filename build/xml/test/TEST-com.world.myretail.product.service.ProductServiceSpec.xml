@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.world.myretail.product.service.ProductServiceSpec" tests="3" skipped="0" failures="0" errors="0" timestamp="2020-02-17T06:17:41" hostname="MACC02XJ0B9JG5L" time="0.216">
+  <properties/>
+  <testcase name="get product" classname="com.world.myretail.product.service.ProductServiceSpec" time="0.201"/>
+  <testcase name="product price is null when cassandra returns empty" classname="com.world.myretail.product.service.ProductServiceSpec" time="0.002"/>
+  <testcase name="update product price and return product" classname="com.world.myretail.product.service.ProductServiceSpec" time="0.013"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

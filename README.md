@@ -21,7 +21,7 @@ Build an application that performs the following actions:
 *  Spring Boot 2.2.4
 *  REST 
 *  Spock 1.3-groovy-2.5
-*  Cassandra 5.1.10
+*  Datastax Cassandra 5.1.10
 
 ## Getting Started
   Install the following tools if you do not already have them:
