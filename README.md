@@ -1,4 +1,4 @@
-# MyRetail
+# MyRetail Application
 
 ## Requirements
 MyRetail is a rapidly growing company with HQ in Richmond, VA and over 200 stores across the east coast. myRetail wants to make its internal data available to any number of client devices, from myRetail.com to native mobile apps. 
@@ -13,14 +13,31 @@ Build an application that performs the following actions:
 * 	Reads pricing information from a NoSQL data store and combines it with the product id and name from the HTTP request into a single response.  
 * 	BONUS: Accepts an HTTP PUT request at the same path (/products/{id}), containing a JSON request body similar to the GET response, and updates the product’s price in the data store.  
 
-
 ## Technology Stack
 
-*   Groovy 
-*   Gradle 
-*   Spring Boot
-*   REST 
-*   Spock
-*   Cassandra
+*  JDK 11
+*  Groovy 2.5.9
+*  Gradle 5.4
+*  Spring Boot 2.2.4
+*  REST 
+*  Spock 1.3-groovy-2.5
+*  Cassandra 5.1.10
 
-##
+## Getting Started
+  Install the following tools if you do not already have them:
+  
+  * If you don’t have it already, install Java(JDK 11).
+  
+  * Install GVM (see http://gvmtool.net/) if it is available for your OS, then use it to install Groovy and Gradle. Alternatively, search the web for installation instructions.
+  
+  * Use git (see https://git-scm.com/) to clone the project.
+  
+  * Launch cassandra in docker
+    -  Navigate to  docker directory 
+    -  Execute run.sh
+    -  Execute schema.sh (to create keyspace and table)
+  
+  * Navigate into the project root directory and run the command "gradle build" to build the project.
+  
+  * Launch the application "gradle bootRun"
+  

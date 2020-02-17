@@ -1,5 +1,9 @@
 package com.world.myretail.fta
 
+import org.springframework.http.client.ClientHttpResponse
+import org.springframework.web.client.DefaultResponseErrorHandler
+import org.springframework.web.util.DefaultUriBuilderFactory
+
 import com.world.myretail.MyretailApplication
 import org.springframework.boot.web.client.RestTemplateBuilder
 
@@ -13,7 +17,6 @@ import javax.annotation.Resource
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.annotation.ComponentScan
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.web.client.RestTemplate
 
 import spock.lang.AutoCleanup
@@ -27,17 +30,27 @@ class BaseFta extends Specification {
   @AutoCleanup
   ConfigurableApplicationContext context
 
-  RestTemplate restTemplate =  new RestTemplateBuilder().rootUri('http://localhost:8080').build()
+  RestTemplate restTemplate = new RestTemplateBuilder()
+      .uriTemplateHandler(new DefaultUriBuilderFactory('http://localhost:8080'))
+      .errorHandler(new FtaRestClientErrorHandler())
+      .build()
 
   void setupSpec() {
-      Future future = Executors.newSingleThreadExecutor().submit(
-          new Callable() {
-            ConfigurableApplicationContext call() throws Exception {
-              return new MyretailApplication()
-                  .configure(new SpringApplicationBuilder(MyretailApplication))
-                  .run()
-            }
-          })
-      context = future.get(300, TimeUnit.SECONDS)
-    }
+    Future future = Executors.newSingleThreadExecutor().submit(
+        new Callable() {
+          ConfigurableApplicationContext call() throws Exception {
+            return new MyretailApplication()
+                .configure(new SpringApplicationBuilder(MyretailApplication))
+                .run()
+          }
+        })
+    context = future.get(300, TimeUnit.SECONDS)
+  }
+}
+
+class FtaRestClientErrorHandler extends DefaultResponseErrorHandler {
+  @Override
+  void handleError(ClientHttpResponse response) {
+    //do nothing
+  }
 }
