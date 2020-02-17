@@ -84,6 +84,6 @@ Build an application that performs the following actions:
         }
        
 ### Functional test reports
- * Navigate tomyretail/build/reports/runFtas/packages
+ * Navigate to myretail/build/reports/runFtas/packages
 ### Unit test reports 
-  * Navigate tomyretail/build/reports/test/packages
+  * Navigate to myretail/build/reports/test/packages
