@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
+import com.world.myretail.product.domain.CurrentPrice
 import com.world.myretail.product.domain.Product
 import com.world.myretail.product.service.ProductService
 
@@ -25,9 +26,9 @@ class ProductController {
     productService.getProduct(id)
   }
 
-  @PutMapping
+  @PutMapping('/price')
   @ResponseStatus(HttpStatus.ACCEPTED)
-  Product upsertProductPrice(@PathVariable('id') String id, @RequestBody Map productPrice) {
-    productService.upsertProductPrice(id, productPrice)
+  Product upsertProductPrice(@PathVariable('id') String id, @RequestBody CurrentPrice currentPrice) {
+    productService.upsertProductPrice(id, currentPrice)
   }
 }

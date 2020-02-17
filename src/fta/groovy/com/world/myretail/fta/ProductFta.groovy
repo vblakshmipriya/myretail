@@ -18,7 +18,7 @@ class ProductFta extends BaseFta {
     then:
     response.statusCode == HttpStatus.OK
     response.body.name == 'Conan the Barbarian (dvd_video)'
-    response.body.current_price == [value: 0.0, currency_code: '']
+    response.body.current_price == null
     response.body.links == [[rel: 'self', href: 'http://localhost:8080/v1/product/id/13860427']]
   }
 
@@ -34,13 +34,13 @@ class ProductFta extends BaseFta {
 
   def 'update product price'() {
     when:
-    ResponseEntity putResponse = restTemplate.exchange('/v1/product/id/13860428', HttpMethod.PUT, new HttpEntity([price: [value: 120.00, code: 'USD']], new HttpHeaders()), Map)
+    ResponseEntity putResponse = restTemplate.exchange('/v1/product/id/13860428/price', HttpMethod.PUT, new HttpEntity([value: 120.00, currency_code:  'USD'], new HttpHeaders()), Map)
 
     then:
     putResponse.statusCode == HttpStatus.ACCEPTED
     putResponse.body.id == '13860428'
     putResponse.body.current_price == [value: 120.00, currency_code: 'USD']
-    putResponse.body.links == [[rel: 'self', href: 'http://localhost:8080/v1/product/id/13860428']]
+    putResponse.body.links == [[rel: 'self', href: 'http://localhost:8080/v1/product/id/13860428/price']]
 
     when:
     ResponseEntity response = restTemplate.exchange('/v1/product/id/13860428', HttpMethod.GET, new HttpEntity(null, new HttpHeaders()), Map)
