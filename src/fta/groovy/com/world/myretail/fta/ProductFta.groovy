@@ -57,7 +57,6 @@ class ProductFta extends BaseFta {
 
     then:
     putResponse.statusCode == HttpStatus.NOT_FOUND
-    putResponse.body.id == '13860428'
     putResponse.body.status == 404
     putResponse.body.message == 'Unable to update price details for product. Product not found for id=invalidId'
   }
