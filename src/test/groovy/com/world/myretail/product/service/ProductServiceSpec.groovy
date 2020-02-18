@@ -8,6 +8,7 @@ import spock.lang.Specification
 import com.world.myretail.product.domain.CurrentPrice
 import com.world.myretail.product.domain.Price
 import com.world.myretail.product.domain.Product
+import com.world.myretail.product.exception.NotFoundException
 import com.world.myretail.product.repository.PriceRepository
 
 class ProductServiceSpec extends Specification {
@@ -50,11 +51,22 @@ class ProductServiceSpec extends Specification {
 
     then:
     1 * new Date() >> mockDate
+    1 * mockRestTemplate.getForObject('/v2/pdp/tcin/12345', Map) >> [product: [item: [product_description: [title: 'product_name']]]]
     1 * mockPriceRepository.save(new Price(product_id: '12345', price_record: "{\"value\":10.0,\"currency_code\":\"usd\"}", last_update_on: mockDate))
     product.id == '12345'
     product.current_price.value == 10.0
     product.current_price.currency_code == 'usd'
     product.links.first().rel == 'self'
     product.links.first().href == 'host/v1/product/id/12345/price'
+  }
+
+  def 'throw exception if no product found for price update'() {
+    given:
+    mockRestTemplate.getForObject('/v2/pdp/tcin/12345', Map) >> {throw new NotFoundException("no product found")}
+    when:
+    Product product = productService.upsertProductPrice('12345', new CurrentPrice(value: 10.00, currency_code: 'usd'))
+
+    then:
+    thrown(NotFoundException.class)
   }
 }

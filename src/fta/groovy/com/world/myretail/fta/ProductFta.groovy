@@ -34,7 +34,7 @@ class ProductFta extends BaseFta {
 
   def 'update product price'() {
     when:
-    ResponseEntity putResponse = restTemplate.exchange('/v1/product/id/13860428/price', HttpMethod.PUT, new HttpEntity([value: 120.00, currency_code:  'USD'], new HttpHeaders()), Map)
+    ResponseEntity putResponse = restTemplate.exchange('/v1/product/id/13860428/price', HttpMethod.PUT, new HttpEntity([value: 120.00, currency_code: 'USD'], new HttpHeaders()), Map)
 
     then:
     putResponse.statusCode == HttpStatus.ACCEPTED
@@ -49,5 +49,16 @@ class ProductFta extends BaseFta {
     response.statusCode == HttpStatus.OK
     response.body.name == 'The Big Lebowski (Blu-ray)'
     response.body.current_price == [value: 120.00, currency_code: 'USD']
+  }
+
+  def 'no updates if product price is not available in redsky'() {
+    when:
+    ResponseEntity putResponse = restTemplate.exchange('/v1/product/id/invalidId/price', HttpMethod.PUT, new HttpEntity([value: 120.00, currency_code: 'USD'], new HttpHeaders()), Map)
+
+    then:
+    putResponse.statusCode == HttpStatus.NOT_FOUND
+    putResponse.body.id == '13860428'
+    putResponse.body.status == 404
+    putResponse.body.message == 'Unable to update price details for product. Product not found for id=invalidId'
   }
 }
