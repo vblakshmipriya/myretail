@@ -49,18 +49,25 @@ class ProductService {
   }
 
   Product upsertProductPrice(String id, CurrentPrice currentPrice) {
-    priceRepository.save(new Price(product_id: id, currentPrice: currentPrice, last_update_on: new Date()))
-    String href = "$host/v1/product/id/$id/price"
-    new Product(
-        id: id,
-        current_price: new CurrentPrice(value: currentPrice.value, currency_code: currentPrice.currency_code),
-        links:
-            [
+    try {
+      if (redskyRestTemplate.getForObject("/v2/pdp/tcin/$id", Map)?.product) {
+        priceRepository.save(new Price(product_id: id, currentPrice: currentPrice, last_update_on: new Date()))
+        String href = "$host/v1/product/id/$id/price"
+        new Product(
+            id: id,
+            current_price: new CurrentPrice(value: currentPrice.value, currency_code: currentPrice.currency_code),
+            links:
                 [
-                    rel : 'self',
-                    href: href
+                    [
+                        rel : 'self',
+                        href: href
+                    ]
                 ]
-            ]
-    )
+        )
+      }
+    }
+    catch (HttpClientErrorException e) {
+      throw new NotFoundException("Unable to update price details for product. Product not found for id=$id")
+    }
   }
 }
