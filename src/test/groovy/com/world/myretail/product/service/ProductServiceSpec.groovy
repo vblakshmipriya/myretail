@@ -14,7 +14,7 @@ import com.world.myretail.product.repository.PriceRepository
 class ProductServiceSpec extends Specification {
   RestTemplate mockRestTemplate = Mock()
   PriceRepository mockPriceRepository = Mock()
-  ProductService productService = new ProductService(redskyRestTemplate: mockRestTemplate, priceRepository: mockPriceRepository, host: 'host')
+  ProductService productService = new ProductService(redskyRestTemplate: mockRestTemplate, priceRepository: mockPriceRepository, host: 'host', redskyurl: '/v2/pdp/tcin/')
 
   def 'get product'() {
     when:

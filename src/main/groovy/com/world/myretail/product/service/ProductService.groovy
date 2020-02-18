@@ -26,15 +26,34 @@ class ProductService {
   @Value('${application.host}')
   String host
 
+  @Value('${redsky.product.url}')
+  String redskyurl
+
   Product getProduct(String id) {
-    try {
-      Map product = redskyRestTemplate.getForObject("/v2/pdp/tcin/$id", Map)?.product
-      Price price = priceRepository.findById(id).orElse(new Price(product_id: id))
-      String href = "$host/v1/product/id/$id"
+    Map product = fetchProduct(id)?.product
+    Price price = priceRepository.findById(id).orElse(new Price(product_id: id))
+    String href = "$host/v1/product/id/$id"
+    new Product(
+        id: id,
+        name: product.item.product_description.title,
+        current_price: price.currentPrice,
+        links:
+            [
+                [
+                    rel : 'self',
+                    href: href
+                ]
+            ]
+    )
+  }
+
+  Product upsertProductPrice(String id, CurrentPrice currentPrice) {
+    if (fetchProduct(id)?.product) {
+      priceRepository.save(new Price(product_id: id, currentPrice: currentPrice, last_update_on: new Date()))
+      String href = "$host/v1/product/id/$id/price"
       new Product(
           id: id,
-          name: product.item.product_description.title,
-          current_price: price.currentPrice,
+          current_price: new CurrentPrice(value: currentPrice.value, currency_code: currentPrice.currency_code),
           links:
               [
                   [
@@ -43,31 +62,15 @@ class ProductService {
                   ]
               ]
       )
-    } catch (HttpClientErrorException e) {
-      throw new NotFoundException("Product not found for id=$id")
     }
   }
 
-  Product upsertProductPrice(String id, CurrentPrice currentPrice) {
+  private Map fetchProduct(String id) {
     try {
-      if (redskyRestTemplate.getForObject("/v2/pdp/tcin/$id", Map)?.product) {
-        priceRepository.save(new Price(product_id: id, currentPrice: currentPrice, last_update_on: new Date()))
-        String href = "$host/v1/product/id/$id/price"
-        new Product(
-            id: id,
-            current_price: new CurrentPrice(value: currentPrice.value, currency_code: currentPrice.currency_code),
-            links:
-                [
-                    [
-                        rel : 'self',
-                        href: href
-                    ]
-                ]
-        )
-      }
+      redskyRestTemplate.getForObject("$redskyurl$id", Map)
     }
     catch (HttpClientErrorException e) {
-      throw new NotFoundException("Unable to update price details for product. Product not found for id=$id")
+      throw new NotFoundException("Product not found for id=$id")
     }
   }
 }
